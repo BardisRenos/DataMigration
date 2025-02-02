@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres:alpine
     container_name: my_postgres_db
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -17,23 +17,26 @@ services:
   jenkins:
     image: jenkins/jenkins:lts
     container_name: my_jenkins
-    restart: always
+    restart: unless-stopped
     ports:
       - "8080:8080"
       - "50000:50000"
+    environment:
+      - JENKINS_USER=admin
+      - JENKINS_PASS=admin
     volumes:
       - jenkins_home:/var/jenkins_home
 
-  argocd:
-    image: argoproj/argocd:v2.9.3
-    container_name: my_argocd
-    restart: always
-    ports:
-      - "8081:8080"
-    volumes:
-      - argocd_data:/var/lib/argocd
+#  argocd:
+#    image: argoproj/argocd:v2.9.3
+#    container_name: my_argocd
+#    restart: unless-stopped
+#    ports:
+#      - "8081:8080"
+#    volumes:
+#      - argocd_data:/var/lib/argocd
 
 volumes:
   postgres_data:
   jenkins_home:
-  argocd_data:
+#  argocd_data:
