@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: my_postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: my_jenkins
+    restart: always
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+  argocd:
+    image: argoproj/argocd:v2.9.3
+    container_name: my_argocd
+    restart: always
+    ports:
+      - "8081:8080"
+    volumes:
+      - argocd_data:/var/lib/argocd
+
+volumes:
+  postgres_data:
+  jenkins_home:
+  argocd_data:
